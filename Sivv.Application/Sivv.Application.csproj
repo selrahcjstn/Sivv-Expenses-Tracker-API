@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Features\UserAccounts\Queries\" />
+    <Folder Include="Features\UserProfiles\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

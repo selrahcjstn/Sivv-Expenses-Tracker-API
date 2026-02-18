@@ -3,11 +3,11 @@ using Sivv.Application.Features.UserAccounts.Commands.CreateUserAccount;
 
 namespace Sivv.Api.Endpoints
 {
-    public static class UserEnpoints
+    public static class UserAccountEndpoint
     {
-            public static void MapUserEndpoints(this WebApplication app)
+            public static void MapUserEndpoints(this IEndpointRouteBuilder app)
             {
-               var group = app.MapGroup("/api/users");
+               var group = app.MapGroup("/api/account");
                 group.MapPost("/register", async (IMediator mediator, CreateUserAccountCommand command) =>
                 {
                     var result = await mediator.Send(command);
@@ -21,7 +21,6 @@ namespace Sivv.Api.Endpoints
                     }
                 });
 
-                
         }
     }
 }

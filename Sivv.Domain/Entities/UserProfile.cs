@@ -6,7 +6,7 @@ namespace Sivv.Domain.Entities
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public DateTime BirthDate { get; set; }
+        public DateOnly BirthDate { get; set; }
 
         public Guid UserAccountId { get; set; } // FK
         public UserAccount UserAccount { get; set; } = null!; // Navigation property for user account
@@ -17,7 +17,7 @@ namespace Sivv.Domain.Entities
         {
             FirstName = firstName;
             LastName = lastName;
-            BirthDate = DateTime.Parse(birthDate);
+            BirthDate = DateOnly.Parse(birthDate);
         }
     }
 }

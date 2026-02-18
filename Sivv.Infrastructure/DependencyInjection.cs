@@ -20,6 +20,7 @@ namespace Sivv.Infrastructure
 
             // repositories
             services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+            services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 
             return services;
         }

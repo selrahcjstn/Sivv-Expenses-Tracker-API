@@ -29,7 +29,7 @@ namespace Sivv.Infrastructure.Repositories
         public async Task<UserAccount?> GetByIdAsync(Guid id)
         {
             return await _context.UserAccounts
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .FindAsync(id);
         }
 
         public async Task UpdateAsync(UserAccount user)
