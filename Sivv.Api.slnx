@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Sivv.Api/Sivv.Api.csproj" />
+    <Project Path="Sivv.Application/Sivv.Application.csproj" />
+    <Project Path="Sivv.Domain/Sivv.Domain.csproj" />
+    <Project Path="Sivv.Infrastructure/Sivv.Infrastructure.csproj" />
+  </Folder>
+</Solution>

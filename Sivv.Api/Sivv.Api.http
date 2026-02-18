@@ -1,0 +1,6 @@
+@Sivv.Api_HostAddress = http://localhost:5073
+
+GET {{Sivv.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
