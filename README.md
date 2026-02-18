@@ -20,7 +20,7 @@ The solution enforces **Clean Architecture** principles to maintain decoupling b
 
 ## Technology Stack
 
-* **Framework:** .NET 8 (ASP.NET Core Web API)
+* **Framework:** .NET 10 (ASP.NET Core Web API)
 * **Database:** PostgreSQL
 * **ORM:** Entity Framework Core
 * **API Documentation:** OpenAPI / Swagger
