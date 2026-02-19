@@ -6,11 +6,16 @@ using Sivv.Domain.Interfaces;
 
 namespace Sivv.Application.Features.UserProfiles.Commands.CreateUserProfile
 {
-    public class CreateUserProfileHandler(IUserProfileRepository userProfileRepository, IUserAccountRepository userAccountRepository, IValidator<CreateUserProfileCommand> validator) : IRequestHandler<CreateUserProfileCommand, Result<Guid>>
+    public class CreateUserProfileHandler : IRequestHandler<CreateUserProfileCommand, Result<Guid>>
     {
-        private readonly IUserProfileRepository _userProfileRepository = userProfileRepository;
-        private readonly IUserAccountRepository _userAccountRepository = userAccountRepository;
-        private readonly IValidator<CreateUserProfileCommand> _validator = validator;
+        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IValidator<CreateUserProfileCommand> _validator;
+
+        public CreateUserProfileHandler(IUserProfileRepository userProfileRepository, IValidator<CreateUserProfileCommand> validator)
+        {
+            _userProfileRepository = userProfileRepository;
+            _validator = validator;
+        }
 
         public async Task<Result<Guid>> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
         {
@@ -22,20 +27,13 @@ namespace Sivv.Application.Features.UserProfiles.Commands.CreateUserProfile
                 return await Task.FromResult(Result<Guid>.Failure(errorMessage));
             }
 
-            var user = await _userAccountRepository.GetByIdAsync(request.UserId);
-            if (user == null)
-            {
-                return await Task.FromResult(Result<Guid>.Failure("User doesn't exist, create account first."));
-            }
-
             var userProfile = new UserProfile
-            (
-                request.FirstName,
-                request.LastName,
-                request.BirthDate
-            );
-
-            user.AttachUserProfile(userProfile);
+            {
+                Id = Guid.NewGuid(),
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                BirthDate = request.BirthDate
+            };
 
             await _userProfileRepository.AddAsync(userProfile, cancellationToken);
             return Result<Guid>.Success(userProfile.Id);
