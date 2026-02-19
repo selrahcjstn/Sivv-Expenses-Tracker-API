@@ -21,5 +21,13 @@ namespace Sivv.Domain.Entities
             PasswordHash = passwordHash;
             UserProfile = userProfile;
         }
+
+         public void AttachUserProfile(UserProfile userProfile)
+        {
+            ArgumentNullException.ThrowIfNull(userProfile);
+
+            UserProfile = userProfile;
+            userProfile.AttachUserAccount(this);
+        }
     }
 }
