@@ -19,5 +19,13 @@ namespace Sivv.Domain.Entities
             LastName = lastName;
             BirthDate = DateOnly.Parse(birthDate);
         }
+
+
+        public void AttachUserAccount(UserAccount userAccount)
+        {
+            ArgumentNullException.ThrowIfNull(userAccount);
+            UserAccount = userAccount;
+            UserAccountId = userAccount.Id;
+        }
     }
 }
