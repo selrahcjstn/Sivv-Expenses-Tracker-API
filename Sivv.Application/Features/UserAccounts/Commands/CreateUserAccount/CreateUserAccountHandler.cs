@@ -39,7 +39,6 @@ namespace Sivv.Application.Features.UserAccounts.Commands.CreateUserAccount
 
             var newUser = new UserAccount
             {
-                Id = Guid.NewGuid(),
                 Username = request.Username,
                 Email = request.Email,
                 PasswordHash = request.Password,

@@ -13,11 +13,11 @@ namespace Sivv.Domain.Entities
 
         public UserProfile() { }
 
-        public UserProfile(string firstName, string lastName, string birthDate)
+        public UserProfile(string firstName, string lastName, DateOnly birthDate)
         {
             FirstName = firstName;
             LastName = lastName;
-            BirthDate = DateOnly.Parse(birthDate);
+            BirthDate = birthDate;
         }
 
 
