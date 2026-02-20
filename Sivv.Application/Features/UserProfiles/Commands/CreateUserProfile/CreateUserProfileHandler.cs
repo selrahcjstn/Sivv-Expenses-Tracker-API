@@ -1,42 +1,56 @@
 ﻿using FluentValidation;
 using MediatR;
 using Sivv.Application.Common.Models;
+using Sivv.Application.Features.UserProfiles.Commands.CreateUserProfile;
 using Sivv.Domain.Entities;
 using Sivv.Domain.Interfaces;
 
-namespace Sivv.Application.Features.UserProfiles.Commands.CreateUserProfile
+public class CreateUserProfileHandler
+    : IRequestHandler<CreateUserProfileCommand, Result<Guid>>
 {
-    public class CreateUserProfileHandler : IRequestHandler<CreateUserProfileCommand, Result<Guid>>
+    private readonly IUserAccountRepository _userRepository;
+    private readonly IUserProfileRepository _userProfileRepository;
+    private readonly IValidator<CreateUserProfileCommand> _validator;
+
+    public CreateUserProfileHandler(
+        IUserAccountRepository userRepository,
+        IUserProfileRepository userProfileRepository,
+        IValidator<CreateUserProfileCommand> validator)
     {
-        private readonly IUserProfileRepository _userProfileRepository;
-        private readonly IValidator<CreateUserProfileCommand> _validator;
+        _userRepository = userRepository;
+        _userProfileRepository = userProfileRepository;
+        _validator = validator;
+    }
 
-        public CreateUserProfileHandler(IUserProfileRepository userProfileRepository, IValidator<CreateUserProfileCommand> validator)
+    public async Task<Result<Guid>> Handle(
+        CreateUserProfileCommand request,
+        CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
         {
-            _userProfileRepository = userProfileRepository;
-            _validator = validator;
+            var errorMessage = string.Join("; ",
+                validationResult.Errors.Select(e => e.ErrorMessage));
+
+            return Result<Guid>.Failure(errorMessage);
         }
 
-        public async Task<Result<Guid>> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
-        {
-            var validationResult = _validator.Validate(request);
+        var userAccount = await _userRepository
+            .GetByIdAsync(request.UserId, cancellationToken);
 
-            if (!validationResult.IsValid)
-            {
-                var errorMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
-                return await Task.FromResult(Result<Guid>.Failure(errorMessage));
-            }
+        if (userAccount is null)
+            return Result<Guid>.Failure("User not found");
 
-            var userProfile = new UserProfile
-            {
-                Id = Guid.NewGuid(),
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                BirthDate = request.BirthDate
-            };
+        var userProfile = new UserProfile(
+            request.FirstName,
+            request.LastName,
+            request.BirthDate
+        );
 
-            await _userProfileRepository.AddAsync(userProfile, cancellationToken);
-            return Result<Guid>.Success(userProfile.Id);
-        }
+        userAccount.AttachUserProfile(userProfile);
+
+        await _userProfileRepository.AddAsync(userProfile, cancellationToken);
+
+        return Result<Guid>.Success(userProfile.Id);
     }
 }

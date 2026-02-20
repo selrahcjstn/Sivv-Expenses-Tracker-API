@@ -30,7 +30,7 @@ namespace Sivv.Application.Features.UserAccounts.Commands.CreateUserAccount
             }
 
             var existingUser =
-                await _userRepository.GetByEmailAsync(request.Email);
+                await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
 
             if (existingUser != null)
             {

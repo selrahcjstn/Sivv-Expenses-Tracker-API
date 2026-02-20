@@ -20,19 +20,19 @@ namespace Sivv.Infrastructure.Repositories
            await _context.SaveChangesAsync();
         }
 
-        public Task<UserAccount?> GetByEmailAsync(string email)
+        public Task<UserAccount?> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
             return _context.UserAccounts
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<UserAccount?> GetByIdAsync(Guid id)
+        public async Task<UserAccount?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.UserAccounts
                 .FindAsync(id);
         }
 
-        public async Task UpdateAsync(UserAccount user)
+        public async Task UpdateAsync(UserAccount user, CancellationToken cancellationToken)
         {
             _context.UserAccounts.Update(user);
 
